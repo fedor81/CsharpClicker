@@ -1,4 +1,5 @@
-﻿using CSharpClicker.Web.UseCases.Login;
+﻿using CsharpClicker.Web.UseCases.Captcha;
+using CSharpClicker.Web.UseCases.Login;
 using CSharpClicker.Web.UseCases.Logout;
 using CSharpClicker.Web.UseCases.Register;
 using CSharpClicker.Web.ViewModels;
@@ -12,10 +13,12 @@ namespace CSharpClicker.Web.Controllers;
 public class AuthController : Controller
 {
     private readonly IMediator mediator;
+    private readonly RecaptchaService captcha;
 
-    public AuthController(IMediator mediator)
+    public AuthController(IMediator mediator, RecaptchaService captcha)
     {
         this.mediator = mediator;
+        this.captcha = captcha;
     }
 
     [HttpPost("register")]
@@ -29,10 +32,11 @@ public class AuthController : Controller
         {
             ModelState.AddModelError(string.Empty, ex.Message);
 
-            var viewModel = new AuthViewModel
+            var viewModel = new RegisterViewModel
             {
                 UserName = command.UserName,
                 Password = command.Password,
+                CaptchaKey = captcha.recaptchaKey
             };
 
             return View(viewModel);
@@ -44,7 +48,7 @@ public class AuthController : Controller
     [HttpGet("register")]
     public IActionResult Register()
     {
-        return View(new AuthViewModel());
+        return View(new RegisterViewModel { CaptchaKey = captcha.recaptchaKey });
     }
 
     [HttpPost("login")]

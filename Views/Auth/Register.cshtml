@@ -1,17 +1,36 @@
-﻿@model AuthViewModel
+﻿@model RegisterViewModel
 
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="bg-light flex-column p-5">
-        <form class="d-flex flex-column align-items-center" asp-action="Register" asp-controller="Auth" method="post">
+        <form id="registration-form" class="d-flex flex-column align-items-center" asp-action="Register" asp-controller="Auth" method="post">
             <h4>Регистрация</h4>
             <label>Имя пользователя</label>
             <input class="form-control mx-auto m-2" type="text" asp-for="@Model.UserName" maxlength="30" />
             <label>Пароль</label>
             <input class="form-control mx-auto m-2" type="password" asp-for="@Model.Password" />
-            <input class="btn btn-primary mx-auto" type="submit" value="Зарегистрироваться" />
+            <div class="g-recaptcha mx-auto m-2" data-sitekey="@Model.CaptchaKey" data-action="SIGNUP"></div>
+            <input type="hidden" id="g-recaptcha-response" asp-for="@Model.CaptchaToken" value="Token" />
+            <input id="registration-input-submit" class="btn btn-primary mx-auto" type="submit" value="Зарегистрироваться" />
+
             <div asp-validation-summary="All"></div>
         </form>
 
         <a asp-action="Login" asp-controller="Auth">Войти в аккаунт</a>
     </div>
 </div>
+
+<script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+<script>
+    window.onload = function() {
+        grecaptcha.enterprise.ready(function() {
+            grecaptcha.enterprise.execute('@Model.CaptchaKey', { action: 'SIGNUP' })
+                .then(function(token) {
+                    console.log(token);
+                    document.getElementById('g-recaptcha-response').value = token;
+                })
+                .catch(function(error) {
+                    console.error('reCAPTCHA error:', error);
+                });
+        });
+    };
+</script>

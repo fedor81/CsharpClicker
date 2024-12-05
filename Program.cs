@@ -2,6 +2,8 @@ using CSharpClicker.Web.Infrastructure.Abstractions;
 using CSharpClicker.Web.Infrastructure.DataAccess;
 using CSharpClicker.Web.Infrastructure.Implementations;
 using CSharpClicker.Web.Initializers;
+using CsharpClicker.Web.UseCases.Captcha;
+using CSharpClicker.Web.UseCases.Captcha;
 
 namespace CSharpClicker.Web;
 
@@ -38,6 +40,14 @@ public class Program
 
     private static void ConfigureServices(IServiceCollection services)
     {
+        var recaptchaSettings = services.BuildServiceProvider()
+            .GetRequiredService<IConfiguration>()
+            .GetSection("Recaptcha")
+            .Get<RecaptchaSettings>();
+
+        services.AddSingleton<RecaptchaService>(provider =>
+            new RecaptchaService(recaptchaSettings.ProjectId, recaptchaSettings.RecaptchaKey));
+
         services.AddHealthChecks();
         services.AddSwaggerGen();
 
