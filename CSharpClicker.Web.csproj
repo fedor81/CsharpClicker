@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UseCases\Новая папка1\**" />
+    <Compile Remove="UseCases\Новая папка\**" />
+    <Content Remove="UseCases\Новая папка1\**" />
+    <Content Remove="UseCases\Новая папка\**" />
+    <EmbeddedResource Remove="UseCases\Новая папка1\**" />
+    <EmbeddedResource Remove="UseCases\Новая папка\**" />
+    <None Remove="UseCases\Новая папка1\**" />
+    <None Remove="UseCases\Новая папка\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="ViewModels\RegisterViewModel.cshtml.cs" />
   </ItemGroup>
 
@@ -18,6 +29,7 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Google.Api.Gax" Version="4.9.0" />
     <PackageReference Include="Google.Cloud.RecaptchaEnterprise.V1" Version="2.17.0" />
+    <PackageReference Include="MailKit" Version="4.9.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.10" />

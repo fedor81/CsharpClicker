@@ -4,6 +4,7 @@ using CSharpClicker.Web.Infrastructure.Implementations;
 using CSharpClicker.Web.Initializers;
 using CsharpClicker.Web.UseCases.Captcha;
 using CSharpClicker.Web.UseCases.Captcha;
+using CSharpClicker.Web.UseCases.Email;
 
 namespace CSharpClicker.Web;
 
@@ -38,7 +39,7 @@ public class Program
         app.Run();
     }
 
-    private static void ConfigureServices(IServiceCollection services)
+    private static async void ConfigureServices(IServiceCollection services)
     {
         var recaptchaSettings = services.BuildServiceProvider()
             .GetRequiredService<IConfiguration>()
@@ -47,6 +48,15 @@ public class Program
 
         services.AddSingleton<RecaptchaService>(provider =>
             new RecaptchaService(recaptchaSettings.ProjectId, recaptchaSettings.RecaptchaKey));
+
+        var emailSettings = services.BuildServiceProvider()
+            .GetRequiredService<IConfiguration>()
+            .GetSection("EmailService")
+            .Get<EmailServiceSettings>();
+
+        services.AddSingleton<EmailService>(provider =>
+            new EmailService(emailSettings.FromName, emailSettings.FromAddress, emailSettings.SmtpServer,
+                emailSettings.SmtpPort, emailSettings.SmtpLogin, emailSettings.SmtpPassword));
 
         services.AddHealthChecks();
         services.AddSwaggerGen();

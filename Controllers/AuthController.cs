@@ -51,6 +51,12 @@ public class AuthController : Controller
         return View(new RegisterViewModel { CaptchaKey = captcha.recaptchaKey });
     }
 
+    [HttpGet("confirm")]
+    public async Task<IActionResult> ConfirmEmail(string userId, string code)
+    {
+        return View();
+    }
+
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginCommand command)
     {

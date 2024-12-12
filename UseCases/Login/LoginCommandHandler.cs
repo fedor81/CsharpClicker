@@ -20,12 +20,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Unit>
     {
         var user = await userManager.FindByNameAsync(request.UserName);
 
-        if (user == null)
+        if (user == null) // || !await userManager.IsEmailConfirmedAsync(user))
         {
             throw new ValidationException("Such user does not exists");
         }
-
-        request.ToString();
 
         var result = await signInManager.PasswordSignInAsync(user, request.Password, isPersistent: true, lockoutOnFailure: false);
 

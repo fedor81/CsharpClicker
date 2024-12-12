@@ -3,6 +3,7 @@ using CsharpClicker.Web.UseCases.Captcha;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using CSharpClicker.Web.UseCases.Email;
 
 namespace CSharpClicker.Web.UseCases.Register;
 
@@ -10,18 +11,20 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Unit>
 {
     private readonly UserManager<ApplicationUser> userManager;
     private readonly RecaptchaService captcha;
+    private readonly EmailService emailService;
 
-    public RegisterCommandHandler(UserManager<ApplicationUser> userManager, RecaptchaService captcha)
+    public RegisterCommandHandler(UserManager<ApplicationUser> userManager, RecaptchaService captcha, EmailService emailService)
     {
         this.userManager = userManager;
         this.captcha = captcha;
+        this.emailService = emailService;
     }
 
     public async Task<Unit> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
+        /*  Капча не работает  
         const string action = "SIGNUP";
 
-        /*  Капча не работает  
         if (request.CaptchaToken == null)
         {
             throw new ValidationException("reCAPTCHA не пройдена.");
@@ -37,27 +40,17 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Unit>
         }
         */
 
-        if (request.UserName == null || request.Password == null)
+        var user = await userManager.FindByNameAsync(request.UserName);
+
+        if (user == null)
         {
-            throw new ValidationException("Username or password cannot be empty.");
+            user = new ApplicationUser
+            {
+                UserName = request.UserName,
+            };
         }
-
-        const int minPassLength = 8;
-
-        if (request.Password.Length < minPassLength)
-        {
-            throw new ValidationException($"Password must be at least {minPassLength} characters long");
-        }
-
-        if (userManager.Users.Any(u => u.UserName == request.UserName))
-        {
+        else // if (user.EmailConfirmed)
             throw new ValidationException("Such user already exists.");
-        }
-
-        var user = new ApplicationUser
-        {
-            UserName = request.UserName,
-        };
 
         var result = await userManager.CreateAsync(user, request.Password);
 
@@ -66,6 +59,9 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Unit>
             var errorString = string.Join(Environment.NewLine, result.Errors);
             throw new ValidationException(errorString);
         }
+
+        // Отправка письма для подтверждения регистрации на email
+        //emailService.SendEmailAsync();
 
         return Unit.Value;
     }
