@@ -25,7 +25,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Unit>
             throw new ValidationException("Such user does not exists");
         }
 
-        var result = await signInManager.PasswordSignInAsync(user, request.Password, isPersistent: true, lockoutOnFailure: false);
+        var result = await signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, lockoutOnFailure: false);
 
         if (!result.Succeeded)
         {

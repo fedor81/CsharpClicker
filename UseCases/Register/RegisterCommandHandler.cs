@@ -12,12 +12,14 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Unit>
     private readonly UserManager<ApplicationUser> userManager;
     private readonly RecaptchaService captcha;
     private readonly EmailService emailService;
+    private readonly SignInManager<ApplicationUser> signInManager;
 
-    public RegisterCommandHandler(UserManager<ApplicationUser> userManager, RecaptchaService captcha, EmailService emailService)
+    public RegisterCommandHandler(UserManager<ApplicationUser> userManager, RecaptchaService captcha, EmailService emailService, SignInManager<ApplicationUser> signInManager)
     {
         this.userManager = userManager;
         this.captcha = captcha;
         this.emailService = emailService;
+        this.signInManager = signInManager;
     }
 
     public async Task<Unit> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -62,6 +64,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Unit>
 
         // Отправка письма для подтверждения регистрации на email
         //emailService.SendEmailAsync();
+
+        await signInManager.SignInAsync(user, isPersistent: false);
 
         return Unit.Value;
     }

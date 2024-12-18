@@ -42,7 +42,7 @@ public class AuthController : Controller
             return View(viewModel);
         }
 
-        return RedirectToAction(nameof(Login));
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet("register")]

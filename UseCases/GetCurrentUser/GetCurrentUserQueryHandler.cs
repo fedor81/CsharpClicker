@@ -28,6 +28,8 @@ public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, U
             .ThenInclude(ub => ub.Boost)
             .FirstAsync(user => user.Id == userId);
 
+        user.LastRequestTime = DateTime.UtcNow;
+
         var userDto = mapper.Map<UserDto>(user);
 
         userDto.ProfitPerClick = user.UserBoosts.GetProfit();

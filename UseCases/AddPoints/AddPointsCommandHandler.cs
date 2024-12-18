@@ -28,11 +28,22 @@ public class AddPointsCommandHandler : IRequestHandler<AddPointsCommand, ScoreDt
         var profitPerSecond = user.UserBoosts.GetProfit(shouldCalculateAutoBoosts: true);
         var profitPerClick = user.UserBoosts.GetProfit();
 
-        var autoPoints = profitPerSecond * request.Seconds;
-        var clickedPoints = profitPerClick * request.Clicks;
+        // Ограничение по максимальному заработку на запрос
+
+        var lastRequestTime = user.LastRequestTime;
+        var lastRequestTimeDelta = DateTime.UtcNow - lastRequestTime;
+        var seconds = (int)Math.Min(lastRequestTimeDelta.TotalSeconds, request.Seconds);
+
+        const int maxClickPerSecond = 7;
+        var clicks = Math.Min(request.Clicks, seconds * maxClickPerSecond);
+
+        var autoPoints = profitPerSecond * seconds;
+        var clickedPoints = profitPerClick * clicks;
 
         user.CurrentScore += autoPoints + clickedPoints;
         user.RecordScore += autoPoints + clickedPoints;
+
+        user.LastRequestTime = DateTime.UtcNow;
 
         await appDbContext.SaveChangesAsync();
 

@@ -4,10 +4,21 @@
     <div class="bg-light flex-column p-5">
         <form class="d-flex flex-column align-items-center" asp-action="Login" asp-controller="Auth" method="post">
             <h4>Войти в аккаунт</h4>
-            <label>Имя пользователя</label>
-            <input class="form-control mx-auto m-2" type="text" asp-for="@Model.UserName" maxlength="30" />
-            <label>Пароль</label>
-            <input class="form-control mx-auto m-2" type="password" asp-for="@Model.Password" />
+
+            <label asp-for="UserName"></label><br />
+            <input class="form-control mx-auto m-2" asp-for="UserName" />
+            <span asp-validation-for="UserName"></span>
+
+            <label asp-for="Password"></label><br />
+            <input class="form-control mx-auto m-2" asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+
+            <div class="form-check m-2">
+                <input type="checkbox" class="form-check-input" asp-for="RememberMe" >
+                <label asp-for="RememberMe" class="form-check-label"></label>
+                <span asp-validation-for="RememberMe"></span>
+            </div>
+
             <input type="submit" class="btn btn-primary mx-auto" value="Войти в аккаунт" />
             <div asp-validation-summary="All"></div>
         </form>
