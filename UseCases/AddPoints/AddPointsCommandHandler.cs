@@ -32,7 +32,7 @@ public class AddPointsCommandHandler : IRequestHandler<AddPointsCommand, ScoreDt
 
         var lastRequestTime = user.LastRequestTime;
         var lastRequestTimeDelta = DateTime.UtcNow - lastRequestTime;
-        var seconds = (int)Math.Min(lastRequestTimeDelta.TotalSeconds, request.Seconds);
+        var seconds = (int)Math.Min(Math.Round(lastRequestTimeDelta.TotalSeconds), request.Seconds);
 
         const int maxClickPerSecond = 7;
         var clicks = Math.Min(request.Clicks, seconds * maxClickPerSecond);

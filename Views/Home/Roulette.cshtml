@@ -1,0 +1,31 @@
+﻿@model RouletteViewModel
+
+@section styles {
+    <link href="@Url.Content("~/css/Roulette.css")" rel="stylesheet">
+}
+
+<div>
+    <nav class="roulette-nav">
+        <h3>Вы находитесь в казино</h3>
+        <p class="user-score">У вас <span id="current-score">@Model.User.CurrentScore</span> руды</p>
+        <a asp-action="Index" asp-controller="Home">Копить руду!</a>
+    </nav>
+
+    <div class="roulette-roll">
+        <canvas></canvas>
+        <div class="bet-container">
+            <p>Ваша ставка</p>
+            <input id="bet-input" type="number" value=@Model.MinBet min=@Model.MinBet max=@Math.Max(0, Model.User.CurrentScore) />
+            <div class="bet-buttons">
+                <button id="bet-min-button" class="btn btn-light">min</button>
+                <button id="bet-max-button" class="btn btn-light">max</button>
+            </div>
+        </div>
+        <button id="roulette-roll-button" class="btn btn-secondary">Вращать</button>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="~/js/Roulette.js"></script>
+}

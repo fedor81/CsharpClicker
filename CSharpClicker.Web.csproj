@@ -8,13 +8,9 @@
 
   <ItemGroup>
     <Compile Remove="UseCases\Новая папка1\**" />
-    <Compile Remove="UseCases\Новая папка\**" />
     <Content Remove="UseCases\Новая папка1\**" />
-    <Content Remove="UseCases\Новая папка\**" />
     <EmbeddedResource Remove="UseCases\Новая папка1\**" />
-    <EmbeddedResource Remove="UseCases\Новая папка\**" />
     <None Remove="UseCases\Новая папка1\**" />
-    <None Remove="UseCases\Новая папка\**" />
   </ItemGroup>
 
   <ItemGroup>

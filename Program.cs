@@ -5,6 +5,7 @@ using CSharpClicker.Web.Initializers;
 using CsharpClicker.Web.UseCases.Captcha;
 using CSharpClicker.Web.UseCases.Captcha;
 using CSharpClicker.Web.UseCases.Email;
+using CSharpClicker.Web.UseCases.Roulette;
 
 namespace CSharpClicker.Web;
 
@@ -57,6 +58,8 @@ public class Program
         services.AddSingleton<EmailService>(provider =>
             new EmailService(emailSettings.FromName, emailSettings.FromAddress, emailSettings.SmtpServer,
                 emailSettings.SmtpPort, emailSettings.SmtpLogin, emailSettings.SmtpPassword));
+
+        services.AddScoped<RouletteService>();
 
         services.AddHealthChecks();
         services.AddSwaggerGen();

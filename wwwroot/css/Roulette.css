@@ -1,0 +1,44 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 18px 'Segoe UI', Arial, Helvetica, sans-serif;
+    background: #f3f3f3;
+}
+
+.roulette-nav {
+    margin: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.roulette-nav .user-score {
+    margin: auto;
+}
+
+.roulette-roll {
+    margin: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bet-container {
+    width: 40%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content:center;
+    align-items: center;
+    margin: 15px;
+}
+
+.bet-container p {
+    margin: 0;
+}
+
+canvas {
+    image-rendering: pixelated;
+}
